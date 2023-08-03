@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="estilo.css">
+    <title>Segunda Rodada</title>
+    <link rel="website icon" type="png" href="sat.png">
+
+</head>
+<body>
+
+    <h1>Cronometro:</h1>
+    <p id="tempo">00:00</p>
+    <button onclick="iniciarCronometro()">Iniciar</button>
+    <button onclick="pararCronometro()">Parar</button>
+    <button onclick="reiniciarCronometro()">Reiniciar</button>
+    <button onclick="aumentarTempo(5)">+5 segundos</button>
+    <button onclick="aumentarTempo(10)">+10 segundos</button>
+    <button onclick="aumentarTempo(15)">+15 segundos</button>
+
+    <script>
+        var cronometro;
+        var tempo = 40;
+
+        function iniciarCronometro() {
+            if (!cronometro) {
+                cronometro = setInterval(atualizarTempo, 1000);
+            }
+        }
+
+        function pararCronometro() {
+            clearInterval(cronometro);
+            cronometro = null;
+        }
+
+        function reiniciarCronometro() {
+            pararCronometro();
+            tempo = 40;
+            atualizarTempo();
+        }
+
+        function aumentarTempo(segundos) {
+            tempo += segundos;
+            atualizarTempo();
+        }
+
+        function atualizarTempo() {
+            if (tempo === 0) {
+                pararCronometro();
+                return;
+            }
+
+            tempo--;
+            var minutos = Math.floor(tempo / 60);
+            var segundos = tempo % 60;
+
+            var formatoTempo = padZero(minutos) + ":" + padZero(segundos);
+            document.getElementById("tempo").textContent = formatoTempo;
+        }
+
+        function padZero(valor) {
+            return valor < 10 ? "0" + valor : valor;
+        }
+    </script>
+    <div id="content">
+        <h1>Pergunta:</h1>
+        <p id="question">Clique no botão "Mudar Pergunta" para começar!</p>
+        <button onclick="changeQuestion()">Mudar Pergunta</button>
+        <button onclick="showHint()">Obter Dica</button>
+        <div id="hints" style="display: none;">
+            <h2>Dicas:</h2>
+            <p id="hint1"></p>
+            <p id="hint2"></p>
+            <p id="hint3"></p>
+        </div>
+    </div>
+    
+    <script>
+        const questions = [
+            {
+                question: "7. Recentemente, um de nossos clientes recebeu um lote a mais de produtos, havendo um conflito com o pedido feito ao setor responsável e o repassado para a produção e expedição. A qual setor devemos recorrer para solicitar um novo pedido de compra correto, evitando assim, mais pedidos equivocados?",
+                hints: [
+                    "Dica 1: Fortalece a imagem da marca junto aos consumidores.",
+                    "Dica 2: Trabalha em colaboração com o setor de marketing.",
+                    "Dica 3: Elabora estratégias para impulsionar as vendas."
+                ]
+            },
+            {
+                question: "8. Durante nosso processo de crescimento, a Maximize sofreu com alguns inconvenientes, e um deles foi em questão de mercadoria despadronizada, ou seja, em um mesmo lote era comum encontrar produtos faltando peças e com layout diferente do modelo original. A qual setor devemos encarregar de garantir o controle de qualidade dos produtos fabricados, realizando testes e inspeções para assegurar que atendam aos padrões exigidos?",
+                hints: [
+                    "Dica 1: Setor que supervisiona o uso de máquinas.",
+                    "Dica 2: Responsável por implementar práticas de segurança no trabalho.",
+                    "Dica 3: Monitora o desempenho da linha de produção, identificar gargalos e buscar melhorias nos processos de fabricação."
+                ]
+            },
+            {
+                question: "9. Há algum tempo, a Maximize sofria com informações incoerentes entre os setores, e um setor específico estava repassando informações incorretas para a produção, atrasando assim a continuidade da linha de produção. Qual é o setor que deve trabalhar em conjunto com o setor de compras e produção para garantir o suprimento adequado de materiais e produtos no armazém?",
+                hints: [
+                    "Dica 1: É responsável por gerenciar as entradas e saídas de produtos.",
+                    "Dica 2: Garantir a segurança e integridade dos produtos.",
+                    "Dica 3: Responsável por embalar, etiquetar e catalogar as mercadorias armazenadas."
+                ]
+            },
+            {
+                question: "10. A Maximize tem todo um processo de criterização para precificar cada mercadoria. Porém, um processo específico que obtém um custo relativamente alto, tem impactado diretamente no preço final da mercadoria. Nosso objetivo é reduzir os custos deste processo, e para isso precisamos recorrer a um certo departamento. Qual é o nome do departamento que devemos solicitar que avalie e selecione os parceiros logísticos com base em critérios como desempenho, confiabilidade e custo?",
+                hints: [
+                    "Dica 1: Cabe a tarefa de lidar com a documentação e trâmites aduaneiros.",
+                    "Dica 2: Negocia contratos com transportadoras e operadores logísticos.",
+                    "Dica 3: Setor que trabalha em conjunto com o setor de distribuição para planejar as rotas de entrega mais eficientes e minimizar os custos logísticos."
+                ]
+            },
+            {
+            question: "15. Dentro dos nossos escritórios, há um nível considerável de procrastinação entre nossos colaboradores. Decidimos realizar uma análise sistemática dos processos de trabalho a fim de identificar uma possível solução para este empecilho. Sendo assim, qual é o recurso que devemos implantar para que haja uma melhor organização e a produtividade no ambiente de trabalho?",
+            hints: [
+                "Dica 1: Responsável por implementar e treinar a equipe na utilização do sistema.",
+                "Dica 2: Adota práticas ágeis e eficientes em um ambiente de trabalho visualmente organizado.",
+                "Dica 3: Um método que permite manter a quantidade adequada de materiais ou produtos em estoque."
+            ]
+        },
+        ];
+    
+    let currentQuestionIndex = -1;
+    let currentHintIndex = 0;
+
+    function changeQuestion() {
+        currentQuestionIndex = (currentQuestionIndex + 1) % questions.length;
+        currentHintIndex = 0;
+        showQuestionAndResetHints();
+    }
+
+    function showQuestionAndResetHints() {
+        const questionElement = document.getElementById("question");
+        const hintsElement = document.getElementById("hints");
+        const hintElements = document.querySelectorAll("#hints p");
+
+        questionElement.textContent = questions[currentQuestionIndex].question;
+
+        hintElements.forEach((hintElement, index) => {
+            hintElement.textContent = questions[currentQuestionIndex].hints[index];
+            hintElement.style.display = "none";
+        });
+
+        hintsElement.style.display = "none";
+    }
+
+    function showHint() {
+        const hintsElement = document.getElementById("hints");
+        const hintElements = document.querySelectorAll("#hints p");
+
+        if (currentQuestionIndex === -1) {
+            currentQuestionIndex = 0;
+        }
+
+        if (currentHintIndex < hintElements.length) {
+            hintElements[currentHintIndex].style.display = "block";
+            currentHintIndex++;
+            hintsElement.style.display = "block";
+        } else {
+            hintsElement.style.display = "none";
+        }
+    }
+</script>
+
+    <h1>Segunda Rodada:</h1>
+    <form action="resultado2.html" method="get">
+        <label for="v1">Grupo 1:</label>
+        <input type="number" id="v1" name="v1"><br><br>
+        
+        <label for="v2">Grupo 2:</label>
+        <input type="number" id="v2" name="v2"><br><br>
+
+        <label for="v3">Grupo 3:</label>
+        <input type="number" id="v3" name="v3"><br><br>
+
+        <label for="v4">Grupo 4:</label>
+        <input type="number" id="v4" name="v4"><br><br>
+
+        <input type="submit" class="ver-resultados" value="VER O RESULTADO SEGUNDA PARTIDA"><br><br>
+    </form>
+
+</body>
+</html>

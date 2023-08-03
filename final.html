@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="estilo.css">
+    <title>Final</title>
+    <link rel="website icon" type="png" href="sat.png">
+</head>
+<body>
+
+    <h1>Cronometro:</h1>
+    <p id="tempo">00:00</p>
+    <button onclick="iniciarCronometro()">Iniciar</button>
+    <button onclick="pararCronometro()">Parar</button>
+    <button onclick="reiniciarCronometro()">Reiniciar</button>
+    <button onclick="aumentarTempo(5)">+5 segundos</button>
+    <button onclick="aumentarTempo(10)">+10 segundos</button>
+    <button onclick="aumentarTempo(15)">+15 segundos</button>
+
+    <script>
+        var cronometro;
+        var tempo = 40;
+
+        function iniciarCronometro() {
+            if (!cronometro) {
+                cronometro = setInterval(atualizarTempo, 1000);
+            }
+        }
+
+        function pararCronometro() {
+            clearInterval(cronometro);
+            cronometro = null;
+        }
+
+        function reiniciarCronometro() {
+            pararCronometro();
+            tempo = 40;
+            atualizarTempo();
+        }
+
+        function aumentarTempo(segundos) {
+            tempo += segundos;
+            atualizarTempo();
+        }
+
+        function atualizarTempo() {
+            if (tempo === 0) {
+                pararCronometro();
+                return;
+            }
+
+            tempo--;
+            var minutos = Math.floor(tempo / 60);
+            var segundos = tempo % 60;
+
+            var formatoTempo = padZero(minutos) + ":" + padZero(segundos);
+            document.getElementById("tempo").textContent = formatoTempo;
+        }
+
+        function padZero(valor) {
+            return valor < 10 ? "0" + valor : valor;
+        }
+    </script>
+        <div id="content">
+            <h1>Pergunta:</h1>
+            <p id="question">Clique no botão "Mudar Pergunta" para começar!</p>
+            <button onclick="changeQuestion()">Mudar Pergunta</button>
+            <button onclick="showHint()">Obter Dica</button>
+            <div id="hints" style="display: none;">
+                <h2>Dicas:</h2>
+                <p id="hint1"></p>
+                <p id="hint2"></p>
+                <p id="hint3"></p>
+            </div>
+        </div>
+        
+        <script>
+            const questions = [
+                {
+                    question: "11. As atividades da nossa empresa tiveram um grande impacto no meio externo, e desde então, surgiu uma preocupação para que implantemos metodologias que visem a redução dos mesmos. Qual a estratégia que devemos aplicar dentro de nossa cadeia logística a partir deste problema?",
+                    hints: [
+                        "Dica 1: Identifica oportunidades de melhoria na cadeia de suprimentos.",
+                        "Dica 2: Buscando reduzir o desperdício e promover a economia circular.",
+                        "Dica 3: Busca minimizar o impacto ambiental, reduzindo as emissões de carbono e promovendo a sustentabilidade."
+                    ]
+                },
+                {
+                    question: "12. Recentemente, percebemos que nossos gastos com matéria prima estavam muito altos e por isso, estamos procurando uma prática de recuperar alguns de nossos produtos para consertá-los ao invés de simplesmente descartá-los, que  nos ajude a reduzir resíduos e custos. Qual é a prática que devemos aplicar para  que seja possível a recuperação e reutilização de componentes ou peças de produtos descartados, visando minimizar o desperdício?",
+                    hints: [
+                        "Dica 1: Garante que a empresa adote práticas sustentáveis em toda a sua cadeia de suprimentos.",
+                        "Dica 2: Assegura que os produtos retornem à cadeia de suprimentos de forma adequada.",
+                        "Dica 3: É o termo utilizado para descrever a logística que envolve a recuperação e reutilização de componentes ou peças de produtos descartados, visando minimizar o desperdício."
+                    ]
+                },
+                {
+                    question: "13. Os galpões da Maximize são bem reprimidos, portanto, desejamos utilizar este pequeno espaço de uma forma mais eficiente sem causar acúmulo desnecessário e superlotação do local. Qual estratégia devemos adotar para que o objetivo citado seja possível e também produzir sem desperdício, com o menor custo dentro de um armazém?",
+                    hints: [
+                        "Dica 1: Busca eliminar gargalos e ineficiências na produção.",
+                        "Dica 2: Monitora e aprimora constantemente os processos de produção.",
+                        "Dica 3: Se baseia em fluxos contínuos, produzindo quantidades exatas de produtos, evitando a acumulação de estoques intermediários."
+                    ]
+                },
+            ];
+        
+            let currentQuestionIndex = -1;
+            let currentHintIndex = 0;
+
+            function changeQuestion() {
+                currentQuestionIndex = (currentQuestionIndex + 1) % questions.length;
+                currentHintIndex = 0;
+                showQuestionAndResetHints();
+            }
+
+            function showQuestionAndResetHints() {
+                const questionElement = document.getElementById("question");
+                const hintsElement = document.getElementById("hints");
+                const hintElements = document.querySelectorAll("#hints p");
+
+                questionElement.textContent = questions[currentQuestionIndex].question;
+
+                hintElements.forEach((hintElement, index) => {
+                    hintElement.textContent = questions[currentQuestionIndex].hints[index];
+                    hintElement.style.display = "none";
+                });
+
+                hintsElement.style.display = "none";
+            }
+
+            function showHint() {
+                const hintsElement = document.getElementById("hints");
+                const hintElements = document.querySelectorAll("#hints p");
+
+                if (currentQuestionIndex === -1) {
+                    currentQuestionIndex = 0;
+                }
+
+                if (currentHintIndex < hintElements.length) {
+                    hintElements[currentHintIndex].style.display = "block";
+                    currentHintIndex++;
+                    hintsElement.style.display = "block";
+                } else {
+                    hintsElement.style.display = "none";
+                }
+            }
+        </script>
+
+    <h1>Rodada Final</h1>
+    <form action="resultadof.html" method="get">
+        <label for="vr1">Grupo 1:</label>
+        <input type="number" id="vr1" name="vr1"><br><br>
+        
+        <label for="vr2">Grupo 2:</label>
+        <input type="number" id="vr2" name="vr2"><br><br>
+
+        <input type="submit" class="ver-resultados" value="VER O RESULTADO"><br><br>
+    </form>
+
+</body>
+</html>

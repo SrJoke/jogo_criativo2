@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="estilo2.css">
+    <title>Resultado Rodada 1</title>
+    <link rel="website icon" type="png" href="sat.png">
+</head>
+<body>
+    <div id="resultados"></div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const pontuacoes = [];
+
+        const grupos = {
+            'valor1': 'Grupo 1',
+            'valor2': 'Grupo 2',
+            'valor3': 'Grupo 3',
+            'valor4': 'Grupo 4',
+            'valor5': 'Grupo 5',
+            'valor6': 'Grupo 6',
+        };
+
+        urlParams.forEach((value, key) => {
+            if (grupos[key]) {
+                pontuacoes.push({ grupo: grupos[key], pontuacao: parseInt(value) || 0 });
+            }
+        });
+
+        pontuacoes.sort((a, b) => b.pontuacao - a.pontuacao);
+
+        let html = '<h2>Resultado Primeira Rodada:</h2>';
+        html += '<ul>';
+        for (const pontuacao of pontuacoes) {
+            html += `<li>${pontuacao.grupo}: ${pontuacao.pontuacao} pontos</li>`;
+        }
+        html += '</ul>';
+
+        document.getElementById('resultados').innerHTML = html;
+    </script>
+    <button onclick="window.location.href = 'Pagina1.html'">Voltar a Rodada 1</button>
+    <button onclick="window.location.href = 'rodada2.html'">Proxima Rodada</button>
+
+</body>
+</html>

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Jogo Interativo e Perguntas</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="website icon" type="png" href="sat.png">
+    <link rel="stylesheet" href="estilo.css">
+    <style>
+
+    </style>
+</head>
+<body>
+
+    <h1>Cronômetro:</h1>
+    <p id="tempo">00:00</p>
+    <button onclick="iniciarCronometro()">Iniciar</button>
+    <button onclick="pararCronometro()">Parar</button>
+    <button onclick="reiniciarCronometro()">Reiniciar</button>
+    <button onclick="aumentarTempo(5)">+5 segundos</button>
+    <button onclick="aumentarTempo(10)">+10 segundos</button>
+    <button onclick="aumentarTempo(15)">+15 segundos</button>
+
+    <script>
+        var cronometro;
+        var tempo = 40;
+
+        function iniciarCronometro() {
+            if (!cronometro) {
+                cronometro = setInterval(atualizarTempo, 1000);
+            }
+        }
+
+        function pararCronometro() {
+            clearInterval(cronometro);
+            cronometro = null;
+        }
+
+        function reiniciarCronometro() {
+            pararCronometro();
+            tempo = 40;
+            atualizarTempo();
+        }
+
+        function aumentarTempo(segundos) {
+            tempo += segundos;
+            atualizarTempo();
+        }
+
+        function atualizarTempo() {
+            if (tempo === 0) {
+                pararCronometro();
+                return;
+            }
+
+            tempo--;
+            var minutos = Math.floor(tempo / 60);
+            var segundos = tempo % 60;
+
+            var formatoTempo = padZero(minutos) + ":" + padZero(segundos);
+            document.getElementById("tempo").textContent = formatoTempo;
+        }
+
+        function padZero(valor) {
+            return valor < 10 ? "0" + valor : valor;
+        }
+    </script>
+
+
+<div id="content">
+    <h1>Pergunta:</h1>
+    <p id="question">Clique no Botão Para iniciar as Perguntas!</p>
+    <button onclick="changeQuestion()">Mudar Pergunta</button>
+    <button onclick="showHint()">Obter Dica</button>
+    <div id="hints" style="display: none;">
+        <h2>Dicas:</h2>
+        <p id="hint1"></p>
+        <p id="hint2"></p>
+        <p id="hint3"></p>
+    </div>
+</div>
+
+<script>
+    const questions = [
+        {
+            question: "1. Há alguns anos no começo da nossa empresa, chegavam algumas reclamações sobre o antigo enchimento de nossas pelúcias. Estavam perdendo volume muito rápido, e consequentemente, as pelúcias murchavam e duravam menos. Para solucionar, onde estava a raiz deste problema?",
+            hints: [
+                "Dica 1: Permite manter a qualidade adequada dos materiais utilizados na produção.",
+                "Dica 2: Aprendemos a fazer sua avaliação.",
+                "Dica 3: Fornecerá os recursos e matérias-primas necessários para produzir o produto final, que chegará até o consumidor."
+            ]
+        },
+        {
+            question: "2. Um de nossos clientes atacadista recebeu um lote de brinquedos com defeito e precisa retornar esta mercadoria para algum destino. Qual seria o destino mais apropriado dentro da cadeia logística?",
+            hints: [
+                "Dica 1: Surgiu na Primeira Revolução Industrial, no fim do século XVIII e início do século XIX, na Inglaterra.",
+                "Dica 2: É marcado pelo aumento do consumo; generalização do trabalho assalariado; incremento da urbanização e desenvolvimento do setor de serviços.",
+                "Dica 3:  É o espaço onde se realiza a transformação da matéria prima em produto manufaturado."
+            ]
+        },
+        {
+            question: "3. A Maximize não vende os produtos de forma unitária, sendo assim, necessita de uma organização cujo objetivo seja comprar em maior escala e revender a mercadoria de forma unitária.",
+            hints: [
+                "Dica 1: Pode ser classificada como de pequeno, médio ou grande porte.",
+                "Dica 2: Tipo de negócio que opera em lojas físicas ou online.",
+                "Dica 3: Designa um negócio que se dedica a comercializar produtos diretamente para o cliente final."
+            ]
+        },
+        {
+            question: "4. A Maximize vende nossas mercadorias para diversas empresas. Alguns de nossos clientes são grandes empresas que compram grandes lotes para revender em lotes menores. Qual fator-chave devemos utilizar para que agregue valor à cadeia de suprimentos, garantindo que os produtos cheguem aos pontos de venda com eficiência e em condições adequadas? ",
+            hints: [
+                "Dica 1: É um intermediário na cadeia de suprimentos.",
+                "Dica 2: Responsável por gerenciar estoques e realizar a consolidação de pedidos.",
+                "Dica 3: É o nome dado à empresa que realiza o transporte e a distribuição de mercadorias de um local para outro."
+            ]
+        },
+        {
+            question: "5. Nossa empresa passou por uma queda de faturamento, e por isso, foi direcionado grande investimento ao marketing para gerar maior engajamento e circulação do nome da marca e os produtos ofertados, atraindo atenção de um certo público. A quem destinamos as campanhas de promoção e desconto realizadas por empresas, visando atrair e incentivar a aquisição de produtos diretamente pelos clientes?",
+            hints: [
+                "Dica 1: É o público-alvo principal das estratégias de marketing.",
+                "Dica 2: Indivíduo que adquire bens ou serviços para seu próprio uso.",
+                "Dica 3: Última etapa na cadeia de suprimentos."
+            ]
+        },
+        {
+            question: "6. Quando temos problemas com matéria prima, insumos insuficientes por exemplo, é necessário recorrer a um setor para procurar uma maneira de repor ou substituí-los. A que departamento devemos solicitar esta função de assegurar que os materiais e insumos necessários estejam disponíveis no momento adequado e em quantidade suficiente para a empresa operar sem interrupções?",
+            hints: [
+                "Dica 1: Setor que trabalha em conjunto com outros departamentos para criar uma estratégia de aquisição.",
+                "Dica 2: Responsável por identificar oportunidades de negociação com fornecedores.",
+                "Dica 3: É o nome do setor encarregado de realizar cotações, análise de fornecedores e processos licitatórios para aquisição de produtos ou serviços."
+            ]
+        },
+        {
+            question: "14. A Maximize tem o objetivo de evoluir cada vez mais. Desde então, foi decidido que todos os colaboradores devem trabalhar em prol desta evolução para contribuir com os resultados futuros, e por esse motivo, precisamos de algum método que inicie a mudança na mentalidade de nossos trabalhadores. Sendo assim, qual é o recurso que tem como base uma filosofia de evolução contínua e gradual que devemos utilizar? ",
+            hints: [
+                "Dica 1: Busca uma abordagem pró-ativa na solução de problemas.",
+                "Dica 2: É o termo japonês utilizado para descrever a filosofia de melhoria contínua.",
+                "Dica 3: Termo utilizado para descrever as reuniões frequentes e regulares que permitem revisar o progresso das melhorias."
+            ]
+        },
+    ];
+
+    let currentQuestionIndex = -1;
+    let currentHintIndex = 0;
+
+    function changeQuestion() {
+        currentQuestionIndex = (currentQuestionIndex + 1) % questions.length;
+        currentHintIndex = 0;
+        showQuestionAndResetHints();
+    }
+
+    function showQuestionAndResetHints() {
+        const questionElement = document.getElementById("question");
+        const hintsElement = document.getElementById("hints");
+        const hintElements = document.querySelectorAll("#hints p");
+
+        questionElement.textContent = questions[currentQuestionIndex].question;
+
+        hintElements.forEach((hintElement, index) => {
+            hintElement.textContent = questions[currentQuestionIndex].hints[index];
+            hintElement.style.display = "none";
+        });
+
+        hintsElement.style.display = "none";
+    }
+
+    function showHint() {
+        const hintsElement = document.getElementById("hints");
+        const hintElements = document.querySelectorAll("#hints p");
+
+        if (currentQuestionIndex === -1) {
+            currentQuestionIndex = 0;
+        }
+
+        if (currentHintIndex < hintElements.length) {
+            hintElements[currentHintIndex].style.display = "block";
+            currentHintIndex++;
+            hintsElement.style.display = "block";
+        } else {
+            hintsElement.style.display = "none";
+        }
+    }
+</script>
+
+    <h1>Primeira Rodada:</h1>
+    <form action="resultado.html" method="get">
+        <label for="valor1">Grupo 1:</label>
+        <input type="number" id="valor1" name="valor1"><br><br>
+        
+        <label for="valor2">Grupo 2:</label>
+        <input type="number" id="valor2" name="valor2"><br><br>
+
+        <label for="valor3">Grupo 3:</label>
+        <input type="number" id="valor3" name="valor3"><br><br>
+
+        <label for="valor4">Grupo 4:</label>
+        <input type="number" id="valor4" name="valor4"><br><br>
+
+        <label for="valor3">Grupo 5:</label>
+        <input type="number" id="valor5" name="valor5"><br><br>
+
+        <label for="valor4">Grupo 6:</label>
+        <input type="number" id="valor6" name="valor6"><br><br>
+
+        <input type="submit" class="ver-resultados" value="VER O RESULTADO PRIMEIRA PARTIDA"><br><br>
+    </form>
+
+</body>
+</html>

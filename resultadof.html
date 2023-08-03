@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="estilo2.css">
+    <title>Resultado Final</title>
+    <link rel="website icon" type="png" href="sat.png">
+</head>
+<body>
+    <div id="resultados"></div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const pontuacoes = [];
+
+        const grupos = {
+            'vr1': 'Grupo 1',
+            'vr2': 'Grupo 2'
+        };
+
+        urlParams.forEach((value, key) => {
+            if (grupos[key]) {
+                pontuacoes.push({ grupo: grupos[key], pontuacao: parseInt(value) || 0 });
+            }
+        });
+
+        pontuacoes.sort((a, b) => b.pontuacao - a.pontuacao);
+
+        let html = '<h2>Resultado Rodada Final:</h2>';
+        html += '<ul>';
+        for (const pontuacao of pontuacoes) {
+            html += `<li>${pontuacao.grupo}: ${pontuacao.pontuacao} pontos</li>`;
+        }
+        html += '</ul>';
+
+        document.getElementById('resultados').innerHTML = html;
+    </script>
+    <button onclick="window.location.href = 'final.html'">Voltar a Rodada Final</button>
+    <button onclick="window.location.href = 'index.html'">Reiniciar</button>
+
+</body>
+</html>
